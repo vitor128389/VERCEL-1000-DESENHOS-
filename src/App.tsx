@@ -338,7 +338,16 @@ export default function App() {
 
   // Video States
   const [videoPlaying, setVideoPlaying] = useState(true); // default autoplays
+  const [videoMuted, setVideoMuted] = useState(true); // default muted for browser autoplay compliance
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const toggleMuteVideo = () => {
+    if (videoRef.current) {
+      const nextMute = !videoMuted;
+      videoRef.current.muted = nextMute;
+      setVideoMuted(nextMute);
+    }
+  };
 
   // Autoplay video on mount (with fallback for safari/chrome restrictions)
   useEffect(() => {
@@ -528,48 +537,68 @@ export default function App() {
 
           {/* Video Player Mockup Directly Under Headline */}
           <div className="w-full flex flex-col items-center justify-center mt-10 relative z-10 animate-float-delayed">
-            <div className="relative aspect-[9/16] w-full max-w-[280px] sm:max-w-[340px] bg-slate-900 rounded-[2.5rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.45)] overflow-hidden border-[8px] border-slate-950 transition-all duration-300 hover:scale-[1.02] group">
-              
-              {/* Selfie camera notch/island simulation for premium smartphone look */}
-              <div className="absolute top-2.5 left-1/2 transform -translate-x-1/2 w-20 h-4 bg-slate-950 rounded-full z-30 flex items-center justify-center space-x-1">
-                <div className="w-1.5 h-1.5 bg-slate-800 rounded-full"></div>
-                <div className="w-1 h-1 bg-slate-900 rounded-full"></div>
-              </div>
-
-              <video
-                ref={videoRef}
-                src={VIDEO_SOURCE}
-                poster="https://i.imgur.com/N0cnZrn.jpg"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover relative z-10 cursor-pointer"
-                onClick={togglePlayVideo}
-              />
-
-              {/* Custom Overlay Controls */}
-              <div className="absolute inset-0 z-20 flex flex-col justify-between p-4 pointer-events-none">
-                <div className="flex justify-between items-start w-full">
-                  <div></div>
+            <div className="w-full max-w-[280px] sm:max-w-[340px] flex flex-col">
+              <div className="relative aspect-[9/16] w-full bg-slate-900 rounded-[2.5rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.45)] overflow-hidden border-[8px] border-slate-950 transition-all duration-300 hover:scale-[1.02] group">
+                
+                {/* Selfie camera notch/island simulation for premium smartphone look */}
+                <div className="absolute top-2.5 left-1/2 transform -translate-x-1/2 w-20 h-4 bg-slate-950 rounded-full z-30 flex items-center justify-center space-x-1">
+                  <div className="w-1.5 h-1.5 bg-slate-800 rounded-full"></div>
+                  <div className="w-1 h-1 bg-slate-900 rounded-full"></div>
                 </div>
 
-                {/* Play/Pause Button overlay - appearing on hover/state */}
-                <div className="absolute inset-0 flex items-center justify-center z-25">
-                  <button
-                    onClick={togglePlayVideo}
-                    className={`pointer-events-auto w-14 h-14 bg-white/95 text-slate-900 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer focus:outline-none ${!videoPlaying ? "opacity-100 scale-100" : "opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100"}`}
-                    aria-label={videoPlaying ? "Pausar Vídeo" : "Reproduzir Vídeo"}
-                  >
-                    {videoPlaying ? (
-                      <Pause className="w-6 h-6 fill-slate-900 stroke-none" />
-                    ) : (
-                      <Play className="w-6 h-6 fill-slate-900 stroke-none ml-0.5" />
-                    )}
-                  </button>
-                </div>
-              </div>
+                <video
+                  ref={videoRef}
+                  src={VIDEO_SOURCE}
+                  poster="https://i.imgur.com/N0cnZrn.jpg"
+                  autoPlay
+                  loop
+                  muted={videoMuted}
+                  playsInline
+                  className="w-full h-full object-cover relative z-10 cursor-pointer"
+                  onClick={togglePlayVideo}
+                />
 
+                {/* Custom Overlay Controls */}
+                <div className="absolute inset-0 z-20 flex flex-col justify-between p-6 pointer-events-none">
+                  <div className="flex justify-between items-start w-full">
+                    <div></div>
+                  </div>
+
+                  {/* Play/Pause Button overlay - appearing on hover/state */}
+                  <div className="absolute inset-0 flex items-center justify-center z-25">
+                    <button
+                      onClick={togglePlayVideo}
+                      className={`pointer-events-auto w-14 h-14 bg-white/95 text-slate-900 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer focus:outline-none ${!videoPlaying ? "opacity-100 scale-100" : "opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100"}`}
+                      aria-label={videoPlaying ? "Pausar Vídeo" : "Reproduzir Vídeo"}
+                    >
+                      {videoPlaying ? (
+                        <Pause className="w-6 h-6 fill-slate-900 stroke-none" />
+                      ) : (
+                        <Play className="w-6 h-6 fill-slate-900 stroke-none ml-0.5" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Bottom Bar with bottom-left Mute Toggle inside the player */}
+                  <div className="w-full flex justify-between items-end relative z-25">
+                    <button
+                      type="button"
+                      onClick={toggleMuteVideo}
+                      className="pointer-events-auto flex items-center justify-center w-8 h-8 rounded-full bg-slate-950/75 hover:bg-slate-950 text-white shadow-md transition-all duration-150 cursor-pointer focus:outline-none active:scale-90 border border-white/10"
+                      aria-label={videoMuted ? "Ativar Áudio" : "Silenciar"}
+                      title={videoMuted ? "Ativar Som" : "Silenciar"}
+                    >
+                      {videoMuted ? (
+                        <VolumeX className="w-4 h-4 text-rose-400 stroke-[2.5]" />
+                      ) : (
+                        <Volume2 className="w-4 h-4 text-green-400 stroke-[2.5]" />
+                      )}
+                    </button>
+                    <div></div>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
 
