@@ -489,17 +489,34 @@ export default function App() {
     setActiveSlide((prev) => (prev - 1 + carouselDrawings.length) % carouselDrawings.length);
   };
 
-  // Rotate social proof toast notifications
+  // Rotate social proof toast notifications: show for 6s, hide for 10s
   useEffect(() => {
-    const toastInterval = setInterval(() => {
+    let timeoutId: any;
+
+    const hideAndScheduleNext = () => {
       setShowToast(false);
-      setTimeout(() => {
+      
+      // Keep it hidden for 10 seconds before showing the next one
+      timeoutId = setTimeout(() => {
         setCurrentBuyToast((prev) => (prev + 1) % liveBuys.length);
         setShowToast(true);
-      }, 500);
-    }, 9000);
 
-    return () => clearInterval(toastInterval);
+        // Keep it visible for 6 seconds, then hide and repeat
+        timeoutId = setTimeout(() => {
+          hideAndScheduleNext();
+        }, 6000);
+
+      }, 10000); // 10 seconds empty interval
+    };
+
+    // Keep the first toast visible for 6 seconds on initial load, then start the cycle
+    timeoutId = setTimeout(() => {
+      hideAndScheduleNext();
+    }, 6000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   // Display mobile bottom bar on scroll
