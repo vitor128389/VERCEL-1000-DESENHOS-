@@ -338,7 +338,7 @@ export default function App() {
 
   // Video States
   const [videoPlaying, setVideoPlaying] = useState(true); // default autoplays
-  const [videoMuted, setVideoMuted] = useState(true); // default muted for browser autoplay compliance
+  const [videoMuted, setVideoMuted] = useState(false); // default unmuted with sound
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const toggleMuteVideo = () => {
@@ -349,10 +349,11 @@ export default function App() {
     }
   };
 
-  // Autoplay video on mount (with fallback for safari/chrome restrictions)
+  // Autoplay video on mount (with automatic interactive unlock for unmuted audio)
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.muted = true;
+      videoRef.current.muted = false;
+      setVideoMuted(false);
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
         playPromise
@@ -360,11 +361,55 @@ export default function App() {
             setVideoPlaying(true);
           })
           .catch((err) => {
-            console.warn("Autoplay block or playback error on mount:", err);
-            setVideoPlaying(false);
+            console.warn("Unmuted autoplay restricted by browser, trying muted autoplay:", err);
+            // Fallback to muted playing if unmuted is rejected by the browser
+            if (videoRef.current) {
+              videoRef.current.muted = true;
+              setVideoMuted(true);
+              videoRef.current.play()
+                .then(() => {
+                  setVideoPlaying(true);
+                })
+                .catch((mutedErr) => {
+                  console.error("Muted fallback also failed:", mutedErr);
+                  setVideoPlaying(false);
+                });
+            }
           });
       }
     }
+
+    // Set up a window-level interaction event listener to automatically unmute the video 
+    // when the user interacts with the page. Browsers allow audio output post-interaction.
+    const handleFirstGesture = () => {
+      if (videoRef.current) {
+        // If it's currently muted, unmute it, sync the state, and play.
+        if (videoRef.current.muted) {
+          videoRef.current.muted = false;
+          setVideoMuted(false);
+          videoRef.current.play()
+            .then(() => setVideoPlaying(true))
+            .catch((err) => console.log("Failed playing unmuted on user gesture:", err));
+        }
+      }
+      // Clean up after first interaction
+      window.removeEventListener("pointerdown", handleFirstGesture, true);
+      window.removeEventListener("click", handleFirstGesture, true);
+      window.removeEventListener("touchstart", handleFirstGesture, true);
+      window.removeEventListener("scroll", handleFirstGesture, true);
+    };
+
+    window.addEventListener("pointerdown", handleFirstGesture, true);
+    window.addEventListener("click", handleFirstGesture, true);
+    window.addEventListener("touchstart", handleFirstGesture, true);
+    window.addEventListener("scroll", handleFirstGesture, true);
+
+    return () => {
+      window.removeEventListener("pointerdown", handleFirstGesture, true);
+      window.removeEventListener("click", handleFirstGesture, true);
+      window.removeEventListener("touchstart", handleFirstGesture, true);
+      window.removeEventListener("scroll", handleFirstGesture, true);
+    };
   }, []);
 
   // IntersectionObserver to pause the video when scrolled down past/out of view
