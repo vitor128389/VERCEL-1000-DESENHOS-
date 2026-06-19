@@ -1,0 +1,8 @@
+{
+  "name": "VERCEL: +1000 Desenhos para Colorir",
+  "description": "Site de vendas completo para o Kit com +1.500 desenhos educativos e divertidos para colorir e imprimir, ideal para pais e professores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

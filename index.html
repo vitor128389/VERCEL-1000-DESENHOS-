@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+    <script>
+      // Safe JSON.stringify monkey-patch to prevent circular and DOM node serialization crashes
+      (function() {
+        const originalStringify = JSON.stringify;
+        JSON.stringify = function(value, replacer, space) {
+          const seen = new WeakSet();
+          function safeReplacer(key, val) {
+            if (val instanceof Node || (typeof val === 'object' && val !== null && val.nodeType !== undefined)) {
+              return "[DOMNode]";
+            }
+            if (typeof val === "object" && val !== null) {
+              if (seen.has(val)) {
+                return "[Circular]";
+              }
+              seen.add(val);
+            }
+            if (replacer) {
+              return replacer(key, val);
+            }
+            return val;
+          }
+          try {
+            return originalStringify(value, replacer || safeReplacer, space);
+          } catch (e) {
+            try {
+              return originalStringify(value, safeReplacer, space);
+            } catch (innerErr) {
+              return '"[Unserializable]"';
+            }
+          }
+        };
+      })();
+    </script>
+    <script>
+      window.pixelId = "6a32006128c43ac3a0e875b5";
+      var a = document.createElement("script");
+      a.setAttribute("async", "");
+      a.setAttribute("defer", "");
+      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+      document.head.appendChild(a);
+    </script>
+    <script
+      src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+      data-utmify-prevent-xcod-sck
+      data-utmify-prevent-subids
+      async
+      defer
+    ></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
