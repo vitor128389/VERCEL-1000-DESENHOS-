@@ -338,8 +338,49 @@ export default function App() {
 
   // Video States
   const [videoPlaying, setVideoPlaying] = useState(true); // default autoplays
-  const [videoMuted, setVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Autoplay video on mount (with fallback for safari/chrome restrictions)
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setVideoPlaying(true);
+          })
+          .catch((err) => {
+            console.warn("Autoplay block or playback error on mount:", err);
+            setVideoPlaying(false);
+          });
+      }
+    }
+  }, []);
+
+  // IntersectionObserver to pause the video when scrolled down past/out of view
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          videoElement.pause();
+          setVideoPlaying(false);
+        }
+      },
+      {
+        threshold: 0.1, // trigger when less than 10% of the video is visible
+      }
+    );
+
+    observer.observe(videoElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   const togglePlayVideo = () => {
     if (videoRef.current) {
@@ -354,14 +395,6 @@ export default function App() {
           setVideoPlaying(false);
         });
       }
-    }
-  };
-
-  const toggleMuteVideo = () => {
-    if (videoRef.current) {
-      const nextMute = !videoMuted;
-      videoRef.current.muted = nextMute;
-      setVideoMuted(nextMute);
     }
   };
 
@@ -509,7 +542,7 @@ export default function App() {
                 poster="https://i.imgur.com/N0cnZrn.jpg"
                 autoPlay
                 loop
-                muted={videoMuted}
+                muted
                 playsInline
                 className="w-full h-full object-cover relative z-10 cursor-pointer"
                 onClick={togglePlayVideo}
@@ -517,7 +550,9 @@ export default function App() {
 
               {/* Custom Overlay Controls */}
               <div className="absolute inset-0 z-20 flex flex-col justify-between p-4 pointer-events-none">
-                <div></div>
+                <div className="flex justify-between items-start w-full">
+                  <div></div>
+                </div>
 
                 {/* Play/Pause Button overlay - appearing on hover/state */}
                 <div className="absolute inset-0 flex items-center justify-center z-25">
