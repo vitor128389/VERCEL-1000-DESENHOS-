@@ -709,27 +709,45 @@ export default function App() {
             {/* PLAN CARD 1: Kit Básico with Immersive UI details */}
             <div 
               id="plano-basico"
-              className="group text-left p-8 rounded-3xl bg-white border-2 border-green-500 transition-all flex flex-col justify-between relative shadow-xl hover:shadow-2xl scroll-mt-28"
+              className="group text-left p-8 rounded-3xl bg-white border-2 border-slate-200 hover:border-green-400 transition-all flex flex-col justify-between relative shadow-xl hover:shadow-2xl scroll-mt-28"
             >
               <div>
                 <div className="flex justify-between items-start">
                   <span className="font-display font-black text-xs text-green-600 uppercase tracking-widest bg-green-50 px-2.5 py-1 rounded-full mb-3">
                     KIT BÁSICO
                   </span>
-                  <span className="text-slate-400 text-xs line-through italic">R$ 29,99</span>
+                  <div className="text-right">
+                    <span className="text-slate-400 text-xs line-through block italic">R$ 99,99</span>
+                    <span className="bg-red-50 text-red-600 text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider block mt-1 animate-pulse">
+                      90% de Desconto
+                    </span>
+                  </div>
                 </div>
                 <p className="text-xs text-slate-500 mb-4">Pacote compacto estruturado para pequenas demandas</p>
-                <div className="text-3xl sm:text-4xl font-black text-slate-900 font-display flex items-baseline gap-1">
-                  <span className="text-sm font-bold text-slate-400">R$</span>10,00
+                <div className="text-3xl sm:text-4xl font-black text-slate-900 font-display flex flex-col justify-start gap-1 pb-4 border-b border-slate-100">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-sm font-bold text-slate-400">R$</span>10,00
+                  </div>
+                  <span className="text-[11px] text-green-600 font-bold block mt-1">
+                    💸 Você economiza R$ 89,99 hoje!
+                  </span>
                 </div>
                 
-                <ul className="text-xs space-y-2 mt-6 pt-6 border-t border-slate-100 text-slate-600 font-medium">
-                  <li className="flex items-center gap-2">✔ +1.000 desenhos para colorir</li>
-                  <li className="flex items-center gap-2">✔ 10 temáticas completas</li>
-                  <li className="flex items-center gap-2">✔ Acesso imediato e entregue via e-mail</li>
-                  <li className="flex items-center gap-2">✔ Acesso Vitalício garantido</li>
+                <ul className="text-xs space-y-2.5 mt-6 text-slate-650 font-medium">
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <span className="text-green-500 font-bold">✔</span> <strong>+1.000 desenhos</strong> de alta qualidade
+                  </li>
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <span className="text-green-500 font-bold">✔</span> <strong>10 temáticas completas</strong> e variadas
+                  </li>
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <span className="text-green-500 font-bold">✔</span> Acesso imediato no seu e-mail
+                  </li>
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <span className="text-green-500 font-bold">✔</span> Download Vitalício (Pasta organizada no Drive)
+                  </li>
                 </ul>
-
+ 
                 {/* Info block mirroring the requested e-mail access visual */}
                 <div className="mt-5 p-4 bg-green-50/50 border border-green-200 rounded-2xl flex items-start gap-3">
                   <Mail className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
@@ -743,40 +761,54 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
+ 
               <div className="mt-8 w-full">
                 <button 
                   type="button"
                   onClick={() => setShowUpsell(true)}
                   className="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-3.5 rounded-xl font-bold text-xs uppercase shadow-md hover:scale-101 transform active:scale-95 transition-all font-sans cursor-pointer"
                 >
-                  Quero o Kit Básico
+                  Quero o Kit Básico por R$ 10,00
                 </button>
                 <span className="text-[10px] text-center text-slate-400 block mt-2.5">🔒 Transação segura e link enviado imediatamente</span>
               </div>
             </div>
-
+ 
             {/* PLAN CARD 2: Kit Premium (Best Seller & Immersive UI Masterpiece) */}
-            <div className="p-8 rounded-3xl bg-white text-slate-800 relative overflow-hidden border-4 border-green-500 shadow-2xl flex flex-col justify-between transform scale-102 lg:scale-105 z-10">
+            <div className="p-8 rounded-3xl bg-[#fdfdfd] text-slate-800 relative overflow-hidden border-4 border-green-500 shadow-2xl flex flex-col justify-between transform scale-102 lg:scale-105 z-10">
               {/* Best seller Banner badge */}
               <div className="absolute top-0 right-0 bg-green-600 text-white px-4 py-1.5 text-[10px] font-black rounded-bl-xl uppercase tracking-wider">
                 Mais Vendido
               </div>
-
+ 
               <div>
-                <div className="space-y-1 mb-4">
-                  <p className="text-xs text-green-600 font-bold uppercase tracking-widest">KIT PREMIUM COMPLETO</p>
-                  <h3 className="text-4xl sm:text-5xl font-black font-display text-slate-900">R$ 27,00</h3>
-                  <p className="text-[10px] text-slate-400 line-through italic">De R$ 79,90</p>
+                <div className="mb-4">
+                  <div className="flex justify-between items-start">
+                    <p className="text-xs text-green-600 font-black uppercase tracking-widest">KIT PREMIUM COMPLETO</p>
+                    <div className="text-right">
+                      <span className="text-slate-400 text-xs line-through block italic">R$ 197,00</span>
+                      <span className="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md uppercase tracking-wider block mt-1">
+                        86% de Desconto
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-black text-slate-900 font-display flex flex-col justify-start gap-1 pb-4 border-b border-slate-100 mt-2">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-sm font-bold text-slate-400">R$</span>27,00
+                    </div>
+                    <span className="text-[11px] text-green-700 font-bold block mt-1">
+                      🔥 Você economiza R$ 170,00 hoje!
+                    </span>
+                  </div>
                 </div>
                 
-                <ul className="text-[11px] sm:text-xs space-y-3 pt-6 border-t border-slate-100 text-slate-700">
+                <ul className="text-[11px] sm:text-xs space-y-3 pt-4 text-slate-700">
                   <li className="flex items-center gap-2"><span className="text-green-600">✔</span> <strong>+1.500 desenhos</strong> de alta definição</li>
                   <li className="flex items-center gap-2"><span className="text-green-600">✔</span> <strong>15 temáticas exclusivas</strong></li>
                   <li className="flex items-center gap-2"><span className="text-green-600">✔</span> Acesso permanentemente vitalício no Google Drive</li>
                   <li className="flex items-center gap-2"><span className="text-green-600">✔</span> PDF pronto para imprimir no tamanho A4</li>
                 </ul>
-
+ 
                 {/* SUPER BONUS PANEL POPPING OUT */}
                 <div className="my-5 p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 shadow-sm relative group">
                   <div className="absolute -top-3 left-4 bg-amber-500 text-white font-display text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1">
@@ -807,7 +839,7 @@ export default function App() {
                     </li>
                   </ul>
                 </div>
-
+ 
                 {/* PROMINENT EMAIL ESCORT */}
                 <div className="mt-4 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 flex gap-2.5 items-start">
                   <Mail className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
@@ -817,15 +849,15 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
+ 
               <div className="mt-8">
                 <a 
                   href="https://pay.wiapy.com/bFiA7MC0-Ic"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-4 rounded-xl font-black text-sm uppercase transition-colors shadow-lg font-display font-sans hover:scale-101 transform active:scale-95 transition-transform"
+                  className="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-4 rounded-xl font-black text-sm uppercase transition-colors shadow-lg font-display font-sans hover:scale-101 transform active:scale-95 transition-transform animate-bounce-subtle"
                 >
-                  Quero o Kit Premium
+                  Quero o Kit Premium por R$ 27,00
                 </a>
                 <span className="text-[10px] text-center text-slate-500 block mt-2.5">🔒 Compra segura e acesso entregue no ato da confirmação</span>
               </div>
