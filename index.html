@@ -38,20 +38,31 @@
       })();
     </script>
     <script>
-      window.pixelId = "6a32006128c43ac3a0e875b5";
-      var a = document.createElement("script");
-      a.setAttribute("async", "");
-      a.setAttribute("defer", "");
-      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-      document.head.appendChild(a);
+      (function() {
+        // Prevent third-party tracking scripts from running and causing crashes inside local development and sandboxed Cloud Run environments
+        const hostname = window.location.hostname;
+        const isSandbox = hostname === "localhost" || hostname === "127.0.0.1" || hostname.includes("run.app") || hostname.includes("aistudio");
+        
+        if (!isSandbox) {
+          window.pixelId = "6a32006128c43ac3a0e875b5";
+          var a = document.createElement("script");
+          a.setAttribute("async", "");
+          a.setAttribute("defer", "");
+          a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+          document.head.appendChild(a);
+
+          var b = document.createElement("script");
+          b.setAttribute("async", "");
+          b.setAttribute("defer", "");
+          b.setAttribute("src", "https://cdn.utmify.com.br/scripts/utms/latest.js");
+          b.setAttribute("data-utmify-prevent-xcod-sck", "");
+          b.setAttribute("data-utmify-prevent-subids", "");
+          document.head.appendChild(b);
+        } else {
+          console.log("[UTMify] Tracking scripts bypassed in local/sandbox container to prevent runtime '_id' errors.");
+        }
+      })();
     </script>
-    <script
-      src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-      data-utmify-prevent-xcod-sck
-      data-utmify-prevent-subids
-      async
-      defer
-    ></script>
   </head>
   <body>
     <div id="root"></div>

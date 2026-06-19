@@ -44,10 +44,8 @@ const userUploadedImageHeroes = "https://i.ibb.co/8nQbJ6Bz/image.png";
 const userUploadedImagePrincesses = "https://i.ibb.co/BVVbq18R/image.png";
 
 // URL ou arquivo de vídeo do Kit de Desenhos para Colorir.
-// Dica: Você pode simplesmente arrastar o seu arquivo de vídeo para a barra lateral esquerda de arquivos
-// e renomeá-lo para "video.mp4" dentro de /src/assets/ ou trocar a URL abaixo para o link direto do seu vídeo!
-const VIDEO_SOURCE = "/video.mp4"; // Se você não tiver o arquivo carregado, use a URL de demonstração ou seu link direto abaixo!
-const FALLBACK_VIDEO_SOURCE = "https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c054236e973c5d609c15985b9b47e2cc&profile_id=139&oauth2_token_id=57447761";
+const VIDEO_SOURCE = "https://i.imgur.com/N0cnZrn.mp4"; // Direct video from Imgur
+const FALLBACK_VIDEO_SOURCE = "https://i.imgur.com/N0cnZrn.mp4";
 
 
 // Custom themed coloring drawings for the carousel
@@ -339,8 +337,8 @@ export default function App() {
   const autoplayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Video States
-  const [videoPlaying, setVideoPlaying] = useState(true); // default autoplays muted
-  const [videoMuted, setVideoMuted] = useState(true);
+  const [videoPlaying, setVideoPlaying] = useState(true); // default autoplays
+  const [videoMuted, setVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const togglePlayVideo = () => {
@@ -488,56 +486,79 @@ export default function App() {
         <div className="absolute bottom-10 left-20 w-16 h-16 bg-blue-300 rounded-full opacity-30 animate-float"></div>
         <div className="absolute bottom-24 right-4 w-12 h-12 bg-yellow-300 rounded-full opacity-25 animate-float-delayed"></div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Hero text & copys */}
-            <div className="w-full lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
+          
+          {/* Centered Headline */}
+          <h1 id="hero-title" className="font-display font-black text-center text-4xl sm:text-5xl lg:text-6xl text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm max-w-3xl">
+            Mais de <strong className="text-green-600 font-extrabold">1.500 Desenhos</strong> para <span className="text-green-600 font-extrabold">Colorir</span> Prontos para <strong>Imprimir</strong>
+          </h1>
+
+          {/* Video Player Mockup Directly Under Headline */}
+          <div className="w-full flex flex-col items-center justify-center mt-10 relative z-10 animate-float-delayed">
+            <div className="relative aspect-[9/16] w-full max-w-[280px] sm:max-w-[340px] bg-slate-900 rounded-[2.5rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.45)] overflow-hidden border-[8px] border-slate-950 transition-all duration-300 hover:scale-[1.02] group">
               
-              <h1 id="hero-title" className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
-                Mais de <strong className="text-green-600 font-extrabold">1.500 Desenhos</strong> para <span className="text-green-600 font-extrabold">Colorir</span> Prontos para <strong>Imprimir</strong>
-              </h1>
-              
-              <p className="mt-6 text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl">
-                Garanta <strong>acesso imediato via e-mail</strong> a um PDF completo com <strong>desenhos educativos</strong> e temáticos organizados e <strong>prontos para imprimir</strong>.
-              </p>
-
-              {/* Main Button with original function and smooth bounce */}
-              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full">
-                <a 
-                  href="#plano-basico" 
-                  onClick={handleScrollToBasic}
-                  className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-display font-black text-center text-lg sm:text-xl px-12 py-5 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 border-b-4 border-green-800 animate-bounce"
-                  style={{ animationDuration: "2.5s" }}
-                >
-                  QUERO MEU KIT AGORA
-                </a>
+              {/* Selfie camera notch/island simulation for premium smartphone look */}
+              <div className="absolute top-2.5 left-1/2 transform -translate-x-1/2 w-20 h-4 bg-slate-950 rounded-full z-30 flex items-center justify-center space-x-1">
+                <div className="w-1.5 h-1.5 bg-slate-800 rounded-full"></div>
+                <div className="w-1 h-1 bg-slate-900 rounded-full"></div>
               </div>
-            </div>
 
-            {/* Beautiful Page Mockup / Feature Image Showcase */}
-            <div className="w-full lg:col-span-6 flex flex-col items-center lg:items-end justify-center mt-8 lg:mt-0 relative z-10 animate-float-delayed">
-              <div className="relative aspect-square w-full max-w-[340px] sm:max-w-[380px] bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-white transition-all duration-300 lg:mr-12">
-                <img
-                  src="https://i.ibb.co/cKHMxtqD/Chat-GPT-Image-17-06-2026-16-41-23.png"
-                  alt="Demonstração do Kit de Desenhos para Colorir"
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
+              <video
+                ref={videoRef}
+                src={VIDEO_SOURCE}
+                poster="https://i.imgur.com/N0cnZrn.jpg"
+                autoPlay
+                loop
+                muted={videoMuted}
+                playsInline
+                className="w-full h-full object-cover relative z-10 cursor-pointer"
+                onClick={togglePlayVideo}
+              />
+
+              {/* Custom Overlay Controls */}
+              <div className="absolute inset-0 z-20 flex flex-col justify-between p-4 pointer-events-none">
+                <div></div>
+
+                {/* Play/Pause Button overlay - appearing on hover/state */}
+                <div className="absolute inset-0 flex items-center justify-center z-25">
+                  <button
+                    onClick={togglePlayVideo}
+                    className={`pointer-events-auto w-14 h-14 bg-white/95 text-slate-900 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer focus:outline-none ${!videoPlaying ? "opacity-100 scale-100" : "opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100"}`}
+                    aria-label={videoPlaying ? "Pausar Vídeo" : "Reproduzir Vídeo"}
+                  >
+                    {videoPlaying ? (
+                      <Pause className="w-6 h-6 fill-slate-900 stroke-none" />
+                    ) : (
+                      <Play className="w-6 h-6 fill-slate-900 stroke-none ml-0.5" />
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
 
+            </div>
           </div>
+
+          {/* Main Button with original function and smooth bounce Directly Under Video */}
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 w-full max-w-md relative z-10">
+            <a 
+              href="#plano-basico" 
+              onClick={handleScrollToBasic}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-display font-black text-center text-xl sm:text-2xl px-12 py-5 rounded-2xl shadow-[0_10px_30px_rgba(22,163,74,0.4)] hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 border-b-4 border-green-800 animate-bounce"
+              style={{ animationDuration: "2.5s" }}
+            >
+              QUERO MEU KIT AGORA
+            </a>
+          </div>
+
         </div>
       </header>
 
       {/* 3. Beautiful Infinite Scrolling Carousel Showcase Band (Relocated Below Hero) */}
       <section className="py-12 bg-slate-50 border-y border-slate-100 select-none overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center">
-          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight">
-            Mais de <span className="text-green-600">1.500 Desenhos</span> Prontos para Colorir e Imprimir!
+          <h2 className="font-display font-black text-2xl sm:text-3xl text-slate-900 tracking-tight uppercase">
+            VEJA ALGUNS EXEMPLOS DO MATERIAL
           </h2>
-          <p className="text-sm text-slate-500 mt-1">Veja alguns dos lindos desenhos inclusos no kit e prontos para a diversão:</p>
         </div>
 
         <style>{`
@@ -552,10 +573,6 @@ export default function App() {
             animation-play-state: paused;
           }
         `}</style>
-
-        {/* Fade gradients on left & right edges to smooth entry/exit inside viewport */}
-        <div className="absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-20 pointer-events-none"></div>
-        <div className="absolute inset-y-0 right-0 w-16 sm:w-24 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-20 pointer-events-none"></div>
         
         <div className="relative w-full overflow-hidden py-2">
           <div 
@@ -804,6 +821,8 @@ export default function App() {
               <div className="mt-8">
                 <a 
                   href="https://pay.wiapy.com/bFiA7MC0-Ic"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-4 rounded-xl font-black text-sm uppercase transition-colors shadow-lg font-display font-sans hover:scale-101 transform active:scale-95 transition-transform"
                 >
                   Quero o Kit Premium
@@ -817,6 +836,63 @@ export default function App() {
 
 
 
+
+        </div>
+      </section>
+
+      {/* 8. Section "Como você vai receber?" */}
+      <section className="py-16 bg-white border-t border-green-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-green-600 font-display font-bold text-sm tracking-wider uppercase">Fácil e Sem Segredos</span>
+            <h2 className="mt-2 text-3xl font-display font-bold text-slate-900">
+              Como você vai receber o material?
+            </h2>
+            <p className="mt-2 text-slate-600">
+              O processo é imediato e seguro, idealizado para sua melhor comodidade e uso.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            
+            {/* Step 1 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border-2 border-green-500 flex flex-col items-center text-center relative">
+              <div className="absolute -top-4 bg-green-600 text-white font-display font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center shadow-md">
+                1
+              </div>
+              <span className="text-4xl mt-4 mb-3">🛒</span>
+              <h3 className="font-display font-bold text-lg text-slate-800">Escolha seu kit</h3>
+              <p className="mt-2 text-slate-500 text-xs leading-relaxed">
+                Role até abaixo, analise o Kit Básico e Kit Premium e escolha qual atende melhor ao seu volume ou orçamento e clique para prosseguir.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border-2 border-green-500 flex flex-col items-center text-center relative">
+              <div className="absolute -top-4 bg-green-600 text-white font-display font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center shadow-md">
+                2
+              </div>
+              <span className="text-4xl mt-4 mb-3">✍️</span>
+              <h3 className="font-display font-bold text-lg text-slate-800">Insira seus Dados</h3>
+              <p className="mt-2 text-slate-500 text-xs leading-relaxed">
+                Na página de checkout, preencha o seu e-mail do Gmail corretamente e realize o pagamento via Pix ou Cartão para aprovação instantânea.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border-2 border-green-500 flex flex-col items-center text-center relative">
+              <div className="absolute -top-4 bg-green-600 text-white font-display font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center shadow-md">
+                3
+              </div>
+              <span className="text-4xl mt-4 mb-3">📂</span>
+              <h3 className="font-display font-bold text-lg text-slate-800">Acesso via Drive</h3>
+              <p className="mt-2 text-slate-500 text-xs leading-relaxed">
+                Você receberá um e-mail contendo o link exclusivo de pasta do Google Drive. Salve-o nos favoritos e comece a imprimir as suas pastas!
+              </p>
+            </div>
+
+          </div>
 
         </div>
       </section>
@@ -876,63 +952,6 @@ export default function App() {
               <h3 className="font-display font-bold text-lg text-slate-900">Reforço Escolar</h3>
               <p className="mt-2 text-slate-600 text-sm leading-relaxed">
                 Adicione materiais lúdicos e descontraídos após as aulas de fixação dos conceitos para testar motricidade fina e prender o foco de forma sadia.
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* 8. Section "Como você vai receber?" */}
-      <section className="py-16 bg-white border-t border-green-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="text-green-600 font-display font-bold text-sm tracking-wider uppercase">Fácil e Sem Segredos</span>
-            <h2 className="mt-2 text-3xl font-display font-bold text-slate-900">
-              Como você vai receber o material?
-            </h2>
-            <p className="mt-2 text-slate-600">
-              O processo é imediato e seguro, idealizado para sua melhor comodidade e uso.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            
-            {/* Step 1 */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border-2 border-green-500 flex flex-col items-center text-center relative">
-              <div className="absolute -top-4 bg-green-600 text-white font-display font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center shadow-md">
-                1
-              </div>
-              <span className="text-4xl mt-4 mb-3">🛒</span>
-              <h3 className="font-display font-bold text-lg text-slate-800">Escolha seu kit</h3>
-              <p className="mt-2 text-slate-500 text-xs leading-relaxed">
-                Role até abaixo, analise o Kit Básico e Kit Premium e escolha qual atende melhor ao seu volume ou orçamento e clique para prosseguir.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border-2 border-green-500 flex flex-col items-center text-center relative">
-              <div className="absolute -top-4 bg-green-600 text-white font-display font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center shadow-md">
-                2
-              </div>
-              <span className="text-4xl mt-4 mb-3">✍️</span>
-              <h3 className="font-display font-bold text-lg text-slate-800">Insira seus Dados</h3>
-              <p className="mt-2 text-slate-500 text-xs leading-relaxed">
-                Na página de checkout, preencha o seu e-mail do Gmail corretamente e realize o pagamento via Pix ou Cartão para aprovação instantânea.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border-2 border-green-500 flex flex-col items-center text-center relative">
-              <div className="absolute -top-4 bg-green-600 text-white font-display font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center shadow-md">
-                3
-              </div>
-              <span className="text-4xl mt-4 mb-3">📂</span>
-              <h3 className="font-display font-bold text-lg text-slate-800">Acesso via Drive</h3>
-              <p className="mt-2 text-slate-500 text-xs leading-relaxed">
-                Você receberá um e-mail contendo o link exclusivo de pasta do Google Drive. Salve-o nos favoritos e comece a imprimir as suas pastas!
               </p>
             </div>
 
@@ -1268,6 +1287,8 @@ export default function App() {
             <div className="space-y-2 mt-4">
               <a 
                 href="https://pay.wiapy.com/AgumUrd9H-8"
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setShowUpsell(false)}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-display font-extrabold text-center block py-3 rounded-xl shadow-lg transition-all transform hover:scale-101 cursor-pointer text-sm sm:text-base uppercase tracking-wider border-b-4 border-green-800 active:scale-95 font-sans"
               >
@@ -1276,6 +1297,8 @@ export default function App() {
               
               <a 
                 href="https://pay.wiapy.com/Pa1XKNff1v"
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setShowUpsell(false)}
                 className="w-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-medium text-center block py-2 rounded-xl transition-all cursor-pointer text-[11px] font-sans"
               >
